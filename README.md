@@ -1,5 +1,6 @@
 # MOVIE TICKET BOOKING SYSTEM
- Sahana Pandurangi Raghavendra, Megana Reddy Boddam
+
+Sahana Pandurangi Raghavendra, Megana Reddy Boddam    
 CSS 533: Distributed Computing
 University of Washington
 
