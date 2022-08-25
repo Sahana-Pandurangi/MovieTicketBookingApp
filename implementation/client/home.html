@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Ticketstar</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+      body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+      .myLink {display: none}
+    </style>
+  </head>
+  <body class="w3-light-grey">
+    <div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+      <a href="https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/home" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i class="fa fa-map-marker w3-margin-right"></i>Ticketstar</b></a>
+    </div>
+    <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+      <img class="w3-image w3-grayscale-max" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+      <div class="w3-display-middle" style="width:65%">
+        <div class="w3-bar w3-black">
+          <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Login');"><i class="w3-margin-center"></i>Login</button>
+          <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'SignUp');"><i class="w3-margin-center"></i>Sign up</button>
+        </div>
+        <div id="Login" class="w3-container w3-white w3-padding-16 myLink">
+          <h3>Log in to start your movie booking experience</h3>
+          <div class="w3-row-padding" style="margin:0 -16px;">
+            <div class="w3-half">
+              <label>User Id</label>
+              <input class="w3-input w3-border useridInput" type="text" placeholder="User Id">
+            </div>
+          </div>
+          <p><button onclick="login()" class="w3-button w3-dark-grey">Login</button></p>
+        </div>
+        <div id="SignUp" class="w3-container w3-white w3-padding-16 myLink">
+          <h3>Register yourself on our platform</h3>
+          <div class="w3-row-padding" style="margin:0 -16px;">
+            <div class="w3-half">
+              <label>First Name</label>
+              <input class="w3-input w3-border registrationform" type="text" placeholder="">
+            </div>
+          </div>
+          <div class="w3-row-padding" style="margin:0 -16px;">
+            <div class="w3-half">
+              <label>Last Name</label>
+              <input class="w3-input w3-border registrationform" type="text" placeholder="">
+            </div>
+          </div>
+          <div class="w3-row-padding" style="margin:0 -16px;">
+            <div class="w3-half">
+              <label>Email</label>
+              <input class="w3-input w3-border registrationform" type="text" placeholder="">
+            </div>
+          </div>
+          <div class="w3-row-padding" style="margin:0 -16px;">
+            <div class="w3-half">
+              <label>Phone</label>
+              <input class="w3-input w3-border registrationform" type="text" placeholder="">
+            </div>
+          </div>
+          <p><button class="w3-button w3-dark-grey" onclick="registerUser()">Register</button></p>
+        </div>
+      </div>
+    </header>
+    <script>
+      //Code for home page. register user and login using userid
+      // Tabs
+      function openLink(evt, linkName) {
+        console.log("Clearing local storage");
+        localStorage.clear();
+
+        var i, x, tablinks;
+        x = document.getElementsByClassName("myLink");
+        for (i = 0; i < x.length; i++) {
+          x[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < x.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+        }
+        document.getElementById(linkName).style.display = "block";
+        evt.currentTarget.className += " w3-red";
+      }
+      
+      // Click on the first tablink on load
+      document.getElementsByClassName("tablink")[0].click();
+
+      function registerUser() {
+        console.log("Registering user.");
+        
+        registrationForm = document.getElementsByClassName("registrationform");
+        
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json', 'x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'};
+        addUserUrl = encodeURI("https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/addnewuser?"
+          + "first_name=" + registrationForm[0].value
+          + "&last_name=" + registrationForm[1].value
+          + "&email=" + registrationForm[2].value
+          + "&phone=" + registrationForm[3].value);
+        
+        console.log("Add user Url: " + addUserUrl);
+        fetch(addUserUrl, { method: "POST", headers: headers })
+          .then(response => response.json())
+          .then((data) => {
+            console.log('Successfully added user: ', data);
+            alert("User is successfully added. Please login with user id: " + data["user_id"]);
+          })
+          .catch((error) => {
+            console.error('Error: ', error);
+            alert("Error trying to add user. Try again.");
+          });
+      }
+
+      function login() {
+        console.log("Logging in.");
+        user_id = parseInt(document.getElementsByClassName("useridInput")[0].value);
+
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json', 'x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'};
+        getUserUrl = encodeURI("https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/getuser?user_id=" + user_id);
+
+        console.log("Getting user: " + getUserUrl);
+        fetch(getUserUrl, { method: "GET", headers: headers })
+          .then(response => response.json())
+          .then((data) => {
+            console.log('Successfully queried: ', data["user"]["user_id"]);
+            if ("user_id" in data["user"]) {
+              localStorage.setItem("user_id_store", user_id);
+              window.location = 'https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/listofcities'
+              return;
+            }
+            alert("User not found!");
+          })
+          .catch((error) => {
+            console.error('Error: ', error);
+            alert("Error trying to login user. Try again.");
+          });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ticketstar</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+          body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+          .myLink {display: none}
+        </style>
+    </head>
+    <body class="w3-light-grey">
+        <div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+            <a href="https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/home" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i class="fa fa-map-marker w3-margin-right"></i>Ticketstar</b></a>
+        </div>
+        <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+            <img class="w3-image w3-grayscale-max" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+            <div class="w3-display-middle" style="width:65%">
+                <div class="w3-bar w3-black">
+                    <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'SelectCity');"><i class="w3-margin-center"></i>Select City</button>
+                </div>
+                <div id="SelectCity" class="w3-container w3-white w3-padding-16 selectCityLink"></div>
+            </div>
+        </header>
+        <script>
+            //Code to display cities of cities to the user. Uses fetch function for API res
+            url_list_of_cities = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listofcities?user_id="
+            headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
+            var user_id = localStorage.getItem('user_id_store');
+            var cities = []
+            var city_code = []
+            console.log(user_id);
+            console.log("Log: " + url_list_of_cities + user_id);
+            fetch(url_list_of_cities + user_id, {method: "GET", headers: headers})
+                .then(response => response.json()) 
+                .then(data => {
+                    for (let i = 0; i < data['city'].length; i++) {
+                        cities.push(data['city'][i]['city_name'])
+                        city_code.push(data['city'][i]['city_code'])
+                    }
+                    console.log('Success:', data);
+                    
+                    let k = 0;
+                    var selectCityElement = document.getElementById("SelectCity");
+                    var title = "<h3>Select a city to book your show in</h3>";
+                    var inputs = "";
+                    cities.forEach((cityValue, j) => {
+                        inputs += ' <div class="w3-row-padding" style="margin:0 -16px;"><div class="w3-half"><input class="w3-radio" type="radio" name="city" value="' + city_code[k] + '"> <label class="radio-label">' + cities[k] + '</label></div></div>';
+                        k++;
+                    });
+                        
+                    var button = '<p><button class="w3-button w3-dark-grey" onclick="next()">Next: Select Theater</button></p>';
+
+                    selectCityElement.innerHTML = title + inputs + button;})
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert("Failed to populate the list of cities");
+                });
+
+                function next() {
+                    const radioButtons = document.getElementsByClassName('w3-radio');
+                    const radioLabels = document.getElementsByClassName('radio-label');
+                    for (let i = 0; i < radioButtons.length; i++) {
+                        if (radioButtons[i].checked) {
+                            console.log("Radio button with value: " + radioButtons[i].value);
+                            localStorage.setItem("city_code", radioButtons[i].value);
+                            localStorage.setItem("city_name", radioLabels[i].innerHTML);
+                            window.location = 'https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/listoftheaters';
+                            return;
+                        }
+                    }
+                    alert("Select a city first!");
+                }
+                
+        </script>
+    </body>
+</html>

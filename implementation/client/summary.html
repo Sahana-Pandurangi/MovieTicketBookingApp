@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ticketstar</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+          body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+          .myLink {display: none}
+        </style>
+    </head>
+    <body class="w3-light-grey">
+        <div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+            <a href="https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/home" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i class="fa fa-map-marker w3-margin-right"></i>Ticketstar</b></a>
+        </div>
+        <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+          <img class="w3-image w3-grayscale-max" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+          <div class="w3-display-middle" style="width:65%">
+            <div class="w3-bar w3-black">
+                <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Summary');"><i class="w3-margin-center"></i>Summary</button>
+            </div>
+            <div id="Summary" class="w3-container w3-white w3-padding-16 SummaryLink">
+              <h3>Summary</h3>
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <label>City</label>
+                </div>
+                <div class="w3-quarter w3-border">
+                  <label class="city"></label>
+                </div>
+              </div>
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <label>Theater</label>
+                </div>
+                <div class="w3-quarter w3-border">
+                  <label class="theater"></label>
+                </div>
+              </div>
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <label>Movie</label>
+                </div>
+                <div class="w3-quarter w3-border">
+                  <label class="movie"></label>
+                </div>
+              </div>
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <label>Show time</label>
+                </div>
+                <div class="w3-quarter w3-border">
+                  <label class="starttime"></label>
+                </div>
+              </div>
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <label>Seats</label>
+                </div>
+                <div class="w3-quarter w3-border">
+                  <label class="seats"></label>
+                </div>
+              </div>
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <label><b>Cost</b></label>
+                </div>
+                <div class="w3-quarter">
+                  <label class="moviecost"></label>
+                </div>
+              </div>
+              <hr />
+              <h5>Food</h5>
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <label>Item</label>
+                </div>
+                <div class="w3-quarter w3-border">
+                  <label class="fooditem"></label>
+                </div>
+              </div>
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <label>Quantity</label>
+                </div>
+                <div class="w3-quarter w3-border">
+                  <label class="quantity"></label>
+                </div>
+              </div>
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <label><b>Cost</b></label>
+                </div>
+                <div class="w3-quarter">
+                  <label class="foodcost"></label>
+                </div>
+              </div>
+              <hr />
+              <div class="w3-row-padding" style="margin:0 -16px;">
+                <div class="w3-quarter">
+                  <b style="color: greenyellow;">Total</b>
+                </div>
+                <div class="w3-quarter">
+                  <b style="color: greenyellow;" class="totalcost"></b>
+                </div>
+              </div>
+              <p><button class="w3-button w3-dark-grey" onclick="payment()" id="button">Next: Payment Processing</button></p>
+            </div>
+          </div>
+        </header>
+      <script>
+        //Code to display ticket summary
+        document.getElementsByClassName("city")[0].innerHTML = localStorage.getItem("city_name");
+        document.getElementsByClassName("theater")[0].innerHTML = localStorage.getItem("selected_theater_name");
+        document.getElementsByClassName("movie")[0].innerHTML = localStorage.getItem("selected_movie_name");
+        document.getElementsByClassName("starttime")[0].innerHTML = localStorage.getItem("selected_start_time");
+        document.getElementsByClassName("seats")[0].innerHTML = localStorage.getItem("final_selected_seat_numbers");
+        document.getElementsByClassName("moviecost")[0].innerHTML = "<b>" + localStorage.getItem("final_total_cost_of_seats") + "</b>";
+        document.getElementsByClassName("fooditem")[0].innerHTML = localStorage.getItem("selected_food_name");
+        document.getElementsByClassName("quantity")[0].innerHTML = localStorage.getItem("quantity_food");
+        document.getElementsByClassName("foodcost")[0].innerHTML = "<b>" + localStorage.getItem("selected_food_price") + "</b>";
+        document.getElementsByClassName("totalcost")[0].innerHTML = "$" + (parseInt(localStorage.getItem("selected_food_price")) + parseInt(localStorage.getItem("final_total_cost_of_seats")));
+        var url_booking_cost = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/bookingcost?booking_id="
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
+        var booking_id1 = localStorage.getItem('booking_id')
+        var url = url_booking_cost + booking_id1
+        fetch(url, 
+        {
+            method: "GET",
+            headers: headers
+            }).then(response => response.json()) 
+            .then(data => { 
+                console.log(data);})
+        
+        // var url_tickets = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listoftickets?booking_id="
+        // headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
+        // var booking_id = localStorage.getItem('booking_id')
+        // fetch(url_tickets + booking_id, 
+        //     {
+        //         method: "GET",
+        //         headers: headers
+        //         }).then(response => response.json()) 
+        //         .then(data => { 
+        //             console.log(data); 
+        //         })
+        function payment()
+        {
+          window.location = 'https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/paymentprocessing';
+        }
+
+      </script>
+  </body>
+</html>

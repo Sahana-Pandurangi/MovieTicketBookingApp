@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ticketstar</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+          body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+          .myLink {display: none}
+        </style>
+    </head>
+    <body class="w3-light-grey">
+        <div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+            <a href="https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/home" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i class="fa fa-map-marker w3-margin-right"></i>Ticketstar</b></a>
+        </div>
+        <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+            <img class="w3-image w3-grayscale-max" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+            <div class="w3-display-middle" style="width:65%">
+                <div class="w3-bar w3-black">
+                    <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'SelectShow');"><i class="w3-margin-center"></i>Select show</button>
+                </div>
+                <div id="SelectShow" class="w3-container w3-white w3-padding-16 selectMovieLink">
+                    <h3>Select the show details</h3>
+                    <div class="w3-row-padding" style="margin:0 -16px;">
+                        <div class="w3-half">
+                            <label>Show dates</label>
+                            <select onchange="selectShows();" class="w3-select w3-border dates-selection" name="option"></select>
+                        </div>
+                    </div>
+                    <div class="w3-row-padding" style="margin:0 -16px;">
+                        <div class="w3-half">
+                            <label>Shows</label>
+                            <select class="w3-select w3-border shows-selection" name="option" disabled></select>
+                        </div>
+                    </div>
+                    <p><button class="w3-button w3-dark-grey" onclick="next()">Next: Select seats</button></p>
+                </div>
+            </div>
+        </header>
+        <script>
+            //code to display show dates based on selected movies. Fetch function is used to send API requests and response
+            url_list_of_show_dates = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listofshowdates?movie_id=";
+            headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'};
+            var movie_id = localStorage.getItem('selected_movie_id');
+            var theater_id = localStorage.getItem('selected_theater_id');
+            var url = url_list_of_show_dates + movie_id + "&theater_id=" + theater_id;
+            console.log("Log: " + url);
+            
+            var dates = []
+            var show_id = []
+            var start_time = []
+            var end_time = []
+            var available_seats = []
+            var room_id=[]
+            var room_name =[]
+            fetch(url, { method: "GET", headers: headers })
+                .then(response => response.json()) 
+                .then(data => { 
+                    console.log("Successfully got dates: " + data);
+                    var dateSelectHtml = '<option value="" disabled selected>Choose date</option>';
+                    for(let i=0; i<data['date'].length; i++){
+                        dates.push(data['date'][i]);
+                        dateSelectHtml += '<option value="' + data['date'][i] + '">' + data['date'][i] + '</option>';
+                    }
+                    
+                    var select = document.getElementsByClassName("dates-selection")[0];
+                    select.innerHTML = dateSelectHtml;})
+                .catch((error) => {
+                    console.error('Error: ', error);
+                    alert("Failed to populate the list of dates.");});
+
+                function selectShows() {
+                    var select = document.getElementsByClassName("dates-selection")[0];
+                    var showsSelect = document.getElementsByClassName("shows-selection")[0];
+
+                    var show_date = select.options[select.selectedIndex].value;
+                    if (show_date === "") {
+                        alert("Choose a date!");
+                        showsSelect.setAttribute("disabled", "true");
+                        return;
+                    }
+
+                    showsSelect.removeAttribute("disabled");
+
+                    var movie_id = localStorage.getItem('selected_movie_id');
+                    var theater_id = localStorage.getItem('selected_theater_id');
+                    var url_list_of_shows = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listofshows?movie_id=";
+                    var url_shows = url_list_of_shows + movie_id + "&theater_id=" + theater_id+ "&show_date=" + show_date;
+                    var headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'};
+
+                    fetch(url_shows, { method: "GET", headers: headers })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Succesfully fetched list of shows: " + data);
+
+                            var showsSelect = document.getElementsByClassName("shows-selection")[0];
+                            var showsSelectHtml = '<option value="" disabled selected>Choose show</option>';
+                            for(let i=0; i<data['shows'].length; i++) {
+                                show_id.push(data['shows'][i]['show_id']);
+                                start_time.push(data['shows'][i]['start_time']);
+                                end_time.push(data['shows'][i]['end_time']);
+                                available_seats.push(data['shows'][i]['available_seats']);
+                                room_id.push(data['shows'][i]['room_id']);
+                                room_name.push(data['shows'][i]['room_name']);
+
+                                showsSelectHtml += '<option value="' + data['shows'][i]['show_id'] + '">Start Time: ' + data['shows'][i]['start_time'] + ' | Seats available: ' + data['shows'][i]['available_seats'] + '</option>';
+                            }
+
+                            showsSelect.innerHTML = showsSelectHtml;
+                        })
+                        .catch((error) => {
+                            console.error('Error: ', error);
+                            alert("Failed to populate the list of shows.");});
+                }
+
+                function next() {
+                    var datesSelect = document.getElementsByClassName("dates-selection")[0];
+                    var selectedDate = datesSelect.options[datesSelect.selectedIndex].value;
+                    if (selectedDate === "") {
+                        alert("Choose a date!");
+                        return;
+                    }
+                    console.log("Selected date: " + selectedDate);
+
+                    var showsSelect = document.getElementsByClassName("shows-selection")[0];
+                    var selectedShow = showsSelect.options[showsSelect.selectedIndex].value;
+                    if (selectedShow === "") {
+                        alert("Choose a show!");
+                        return;
+                    }
+                    console.log("Selected show: " + selectedShow);
+                    
+                    localStorage.setItem("selected_date", selectedDate);
+                    localStorage.setItem("selected_show_id", show_id[showsSelect.selectedIndex-1]);
+                    localStorage.setItem("selected_start_time", start_time[showsSelect.selectedIndex-1]);
+                    localStorage.setItem("selected_end_time", end_time[showsSelect.selectedIndex-1]);
+                    localStorage.setItem("selected_available_seats", available_seats[showsSelect.selectedIndex-1]);
+                    localStorage.setItem("selected_room_id", room_id[showsSelect.selectedIndex-1]);
+                    localStorage.setItem("selected_room_name", room_name[showsSelect.selectedIndex-1]);
+
+                    window.location = 'https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/seats';
+                }
+        </script>
+    </body>
+</html>

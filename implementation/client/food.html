@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ticketstar</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+          body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+          .myLink {display: none}
+        </style>
+    </head>  
+    <body class="w3-light-grey">
+        <div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+            <a href="https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/home" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i class="fa fa-map-marker w3-margin-right"></i>Ticketstar</b></a>
+        </div>
+        <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+            <img class="w3-image w3-grayscale-max" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+            <div class="w3-display-middle" style="width:65%">
+                <div class="w3-bar w3-black">
+                    <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'SelectFood');"><i class="w3-margin-center"></i>Select food</button>
+                </div>
+                <div id="SelectFood" class="w3-container w3-white w3-padding-16 selectFoodLink">
+                    <h3>Would you like to order some snacks?</h3>
+                    <p>
+                        If you don't want to order food please click on the next button without submitting any option. <br />
+                        Please remember to pick up your food from our counter before the movie starts.
+                    </p>
+                    <div class="w3-row-padding" style="margin:0 -16px;">
+                        <div class="w3-half">
+                            <label>Food item</label>
+                            <select onchange="selectQuantity();" class="w3-select w3-border foodSelect" type="text" placeholder=""></select>
+                        </div>
+                        <div class="w3-half">
+                            <label>Quantity</label>
+                            <select class="w3-select w3-border quantitySelect" type="text" placeholder="" disabled>
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p><button class="w3-button w3-dark-grey" onclick="next()">Next: Order summary</button></p>
+                </div>
+            </div>
+        </header>
+        <script>
+        //Function to display and store the food selection. Fetch function is used to send API requests to API gate
+            var user_id = localStorage.getItem('user_id_store');
+            var theater_id = localStorage.getItem('selected_theater_id');
+            var booking_id = localStorage.getItem('booking_id')
+            
+            var headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'};
+            var url_list_of_food_items = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listoffood?user_id=";
+            var url = url_list_of_food_items + user_id + "&theater_id=" + theater_id;
+            console.log("Log: " + url);
+            
+            var food_names = [];
+            var food_ids = [];
+            var food_price = [];
+            fetch(url, { method: "GET", headers: headers })
+                .then(response => response.json()) 
+                .then(data => {
+                    console.log("Successful in getting food items list");
+
+                    var foodSelectHtml = '<option value="" selected>Choose food item</option>';
+                    for(let i = 0; i < data['food'].length; i++) {
+                        food_names.push(data['food'][i]['food_name']);
+                        food_ids.push(data['food'][i]['food_id']);
+                        food_price.push(data['food'][i]['food_price']);
+
+                        foodSelectHtml += '<option value="' + food_ids[i] + '">' + food_names[i] + '</option>';
+                    }
+
+                    var select = document.getElementsByClassName("foodSelect")[0];
+                    select.innerHTML = foodSelectHtml;
+                })
+                .catch((error) => {
+                    console.log("Error: " + error);
+                    alert("Unable to fetch list of food items");
+                });
+            
+            function selectQuantity() {
+                var foodSelect = document.getElementsByClassName("foodSelect")[0];
+                var quantitySelect = document.getElementsByClassName("quantitySelect")[0];
+                if (foodSelect.options[foodSelect.selectedIndex].value === "") {
+                    quantitySelect.setAttribute("disabled", "true");
+                } else {
+                    quantitySelect.removeAttribute("disabled");
+                }
+            }
+            
+            function next() {
+                var foodSelect = document.getElementsByClassName("foodSelect")[0];
+                var quantitySelect = document.getElementsByClassName("quantitySelect")[0];
+                
+                var item = foodSelect.options[foodSelect.selectedIndex].value;
+                var itemname = foodSelect.options[foodSelect.selectedIndex].text;
+                var quantity = quantitySelect.options[quantitySelect.selectedIndex].value;
+                var price = parseInt(food_price[foodSelect.selectedIndex-1]) * parseInt(quantity);
+
+                if (item != "") {
+                    var url_list_of_food_items = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listoffood?booking_id=";
+                    var headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'};
+                    var booking_id = localStorage.getItem('booking_id');
+                    var url = url_list_of_food_items + booking_id + "&food_id=" + parseInt(item) + "&quantity=" + parseInt(quantity) + "&food_price=" + parseInt(price);
+
+                    console.log("POST: " +url);
+                    fetch(url, { method: "POST", headers: headers })
+                        .then(response => response.json()) 
+                        .then(data => {
+                            console.log("Success: " + data);
+                            localStorage.setItem("selected_food_id", item);
+                            localStorage.setItem("selected_food_name", itemname);
+                            localStorage.setItem("quantity_food", quantity);
+                            localStorage.setItem("selected_food_price", price);
+
+                            window.location = 'https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/summary';
+                        })
+                        .catch((error) => {
+                                console.error('Error: ', error);
+                                alert("Failed to add food items to cart");
+                            });
+                } else {
+                    alert("No food items selected!");
+                    window.location = 'https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/summary';
+                }
+            }
+            
+        </script>
+    </body>
+</html>

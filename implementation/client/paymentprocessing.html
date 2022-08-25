@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Ticketstar</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Raleway", Arial, Helvetica, sans-serif
+        }
+
+        .myLink {
+            display: none
+        }
+    </style>
+</head>
+
+<body class="w3-light-grey">
+    <div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+        <a href="https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/home" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i class="fa fa-map-marker w3-margin-right"></i>Ticketstar</b></a>
+    </div>
+    <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+        <img class="w3-image w3-grayscale-max" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+        <div class="w3-display-middle" style="width:65%">
+            <div class="w3-bar w3-black">
+                <button class="w3-bar-item w3-button tablink"><i class="w3-margin-center"></i>Payment Details</button>
+            </div>
+            <div id="Summary" class="w3-container w3-white w3-padding-16 SummaryLink">
+                <h2>Let's start booking your Movie!!</h2>
+                <h3>Please enter your details here:</h3>
+                <form id="myForm">
+                    <div class="w3-row-padding" style="margin:0 -16px;">
+                        <div class="w3-quarter">
+                            <label for="card_holder_name">Card Holders Name</label>
+                        </div>
+                        <input type="text" name="card_holder_name" id="card_holder_name" required /><br><br>
+                            <div class="w3-quarter style="margin:0 -16px;">
+                                <label for="card_number">Card Number</label>
+                            </div>
+                            <input type="card_number" name="card_number" id="card_number" required /><br><br>
+                            <div class="w3-row-padding" style="margin:0 -16px;">
+                                <div class="w3-quarter style="margin:0 -16px;">
+                                    <label for="Expiration">Card Expiration Month and year (MM/YY)</label>
+                                </div>
+                                <input type="text" name="Expiration" id="Expiration" required /><br><br>
+                                <div class="w3-row-padding" style="margin:1 -16px;">
+                                    <div class="w3-quarter">
+                                        <label for="cvc Number">CVC Number</label>
+                                    </div>
+                                    <input type="text" name="cvc" id="cvc" required /><br><br>
+                                    <button type="button" id="submit">Submit</button>
+                </form>
+                <p id="thankyou">
+                    <span class="output"></span>
+                </p>
+            </div>
+            <script>
+                //Code to register booking once user has paid for it
+                var button = document.getElementById("submit")
+                button.addEventListener("click", () => {
+                var url_booking_cost = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/bookingcost?booking_id="
+                var headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
+                var booking_id1 = localStorage.getItem('booking_id')
+                var url = url_booking_cost + booking_id1
+                fetch(url, 
+                {
+                    method: "POST",
+                    headers: headers
+                }).then(response => response.json()) 
+                .then(data => { 
+                    console.log(data);})
+                var thankyou = document.getElementById("thankyou");
+                thankyou.innerHTML = "Your tickets are booked! Thank you for choosing us. Enjoy your movie!"
+                })
+            </script>
+</body>
+
+</html>
