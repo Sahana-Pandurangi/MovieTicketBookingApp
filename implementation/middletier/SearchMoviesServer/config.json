@@ -1,0 +1,6 @@
+{
+    "dbhost" : "database-2.cuwk67pibm33.us-west-2.rds.amazonaws.com",
+    "dbname" : "movietickets",
+    "dbuser" :"admin",
+    "dbpassword" :"adm9n12345"
+}

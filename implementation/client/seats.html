@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Ticketstar</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css">
+        body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+
+        .myLink {display: none}
+
+        .movie-container { margin: 20px 0; }
+
+        .movie-container select {
+            background-color:#fff;
+            border: 0;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-left: 10px;
+            padding: 5px 15px 5px 15px;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .container { perspective: 1000px; margin-bottom: 30px; }
+
+        .seat {
+            background-color: #fff;
+            color: #000;
+            height: 40px;
+            width: 48px;
+            margin: 3px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .seat.selected { background-color: #6feaf6; }
+
+        .seat.occupied { background-color: #000; color: #fff; }
+
+        .seat:nth-of-type(2) { margin-right: 18px; }
+
+        .seat:nth-last-of-type(2) { margin-left: 18px; }
+
+        .seat:not(.occupied):hover { cursor: pointer; transform: scale(1.2); }
+
+        .showcase .seat:not(.occupied):hover { cursor: default; transform: scale(1); }
+
+        .showcase {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #777;
+            list-style-type: none;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .showcase li {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+        }
+
+        .showcase li small { margin-left: 2px; }
+
+        .row { display: flex; }
+
+        .screen {
+            background-color: #fff;
+            height: 70px;
+            width: 100%;
+            margin: 15px 0;
+            transform: rotateX(-45deg);
+            box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
+        }
+
+        p.text { margin: 5px 0; }
+
+        p.text span { color: #6feaf6; }
+    </style>
+  </head>
+  <body class="w3-light-grey">
+    <div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+        <a href="https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/home" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i class="fa fa-map-marker w3-margin-right"></i>Ticketstar</b></a>
+    </div>
+    <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+        <img class="w3-image w3-grayscale-max" src="https://www.w3schools.com/w3images/london2.jpg" alt="London" width="1500" height="700">
+        <div class="w3-display-middle" style="width:65%">
+            <div class="w3-bar w3-black">
+                <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'SelectSeats');"><i class="w3-margin-center"></i>Select seats</button>
+            </div>
+            <div id="SelectSeats" class="w3-container w3-white w3-padding-16 selectSeatsLink">
+                <div class="w3-row-padding" style="margin:0 -16px;">
+                    <div class="w3-half">
+                        <ul class="showcase">
+                            <li>
+                            <div class="seat"></div>
+                            <small>Available</small>
+                            </li>
+                            <li>
+                            <div class="seat selected"></div>
+                            <small>Selected</small>
+                            </li>
+                            <li>
+                            <div class="seat occupied"></div>
+                            <small>Occupied</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                
+                <div class="w3-row-padding" style="margin:0 -16px;">
+                    <div class="w3-half  w3-grey">
+                        <div class="container">
+                            <div class="screen"></div>
+                            <div class="row">
+                                <div class="seat occupied" id="1" name="1">1</div>
+                                <div class="seat occupied" id="2" name="2">2</div>
+                                <div class="seat occupied" id="3" name="3">3</div>
+                                <div class="seat occupied" id="4" name="4">4</div>
+                                <div class="seat occupied" id="5" name="5">5</div>
+                                <div class="seat occupied" id="6" name="6">6</div>
+                                <div class="seat occupied" id="7" name="7">7</div>
+                                <div class="seat occupied" id="8" name="8">8</div>
+                            </div>
+                            <div class="row">
+                                <div class="seat occupied" id="9" name="9">9</div>
+                                <div class="seat occupied" id="10" name="10">10</div>
+                                <div class="seat occupied" id="11" name="11">11</div>
+                                <div class="seat occupied" id="12" name="12">12</div>
+                                <div class="seat occupied" id="13" name="13">13</div>
+                                <div class="seat occupied" id="14" name="14">14</div>
+                                <div class="seat occupied" id="15" name="15">15</div>
+                                <div class="seat occupied" id="16" name="16">16</div>
+                            </div>
+                            <div class="row">
+                                <div class="seat occupied" id="17" name="17">17</div>
+                                <div class="seat occupied" id="18" name="18">18</div>
+                                <div class="seat occupied" id="19" name="19">19</div>
+                                <div class="seat occupied" id="20" name="20">20</div>
+                                <div class="seat occupied" id="21" name="21">21</div>
+                                <div class="seat occupied" id="22" name="22">22</div>
+                                <div class="seat occupied" id="23" name="23">23</div>
+                                <div class="seat occupied" id="24" name="24">24</div>
+                            </div>
+                            <div class="row">
+                                <div class="seat occupied" id="25" name="25">25</div>
+                                <div class="seat occupied" id="26" name="26">26</div>
+                                <div class="seat occupied" id="27" name="27">27</div>
+                                <div class="seat occupied" id="28" name="28">28</div>
+                                <div class="seat occupied" id="29" name="29">29</div>
+                                <div class="seat occupied" id="30" name="30">30</div>
+                                <div class="seat occupied" id="31" name="31">31</div>
+                                <div class="seat occupied" id="32" name="32">31</div>
+                            </div>
+                            <div class="row">
+                                <div class="seat occupied" id="33" name="33">33</div>
+                                <div class="seat occupied" id="34" name="34">34</div>
+                                <div class="seat occupied" id="35" name="35">35</div>
+                                <div class="seat occupied" id="36" name="36">36</div>
+                                <div class="seat occupied" id="37" name="37">37</div>
+                                <div class="seat occupied" id="38" name="38">38</div>
+                                <div class="seat occupied" id="39" name="39">39</div>
+                                <div class="seat occupied" id="40" name="40">40</div>
+                            </div>
+                            <div class="row">
+                                <div class="seat occupied" id="41" name="41">41</div>
+                                <div class="seat occupied" id="42" name="42">42</div>
+                                <div class="seat occupied" id="43" name="43">43</div>
+                                <div class="seat occupied" id="44" name="44">44</div>
+                                <div class="seat occupied" id="45" name="45">45</div>
+                                <div class="seat occupied" id="46" name="46">46</div>
+                                <div class="seat occupied" id="47" name="47">47</div>
+                                <div class="seat occupied" id="48" name="48">48</div>
+                            </div>
+                        </div>     
+                    </div>
+                    <div class="w3-half w3-center">
+                        <p class="text"> You have selected <span id="totalSelected">0</span> seats for a price of $<span id="costSelected">0</span> </p>
+                    </div>
+                </div>
+                <p><button class="w3-button w3-dark-grey" onclick="selectFood()">Submit Selection</button></p>
+                <p><button class="w3-button w3-dark-grey" onclick="next()">Next: Select food</button></p>
+            </div>
+        </div>
+    </header>
+    <script>
+        //Code to display and save the selected seats along with thier prices in backend
+        var totalSeatsSelected = 0;
+        var totalCostOfSeats = 0;
+
+        document.querySelector('.container').addEventListener('click', e => {
+            if (e.target.classList.contains('seat') && !e.target.classList.contains('occupied')) {
+                e.target.classList.toggle('selected');
+
+                var price = 0;
+                console.log("Event on seat number: " + e.target.id);
+                for (let i = 0; i < seat_number.length; i++) {
+                    if (seat_number[i] + "" === e.target.id) {
+                        price = seat_price[i];
+                    }
+                }
+                e.target.id
+                if (e.target.classList.contains('selected')) {
+                    totalSeatsSelected++;
+                    totalCostOfSeats += price;
+                } else {
+                    totalSeatsSelected--;
+                    totalCostOfSeats -= price;
+                }
+                
+                document.getElementById("totalSelected").innerHTML = totalSeatsSelected;
+                document.getElementById("costSelected").innerHTML = totalCostOfSeats;
+            }
+        });
+
+        url_list_of_seats = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listofshowseats?show_id=";
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'};
+        var show_id = localStorage.getItem('selected_show_id');
+        
+        var url = url_list_of_seats + show_id;
+        console.log("Log: " + url);
+
+        var seat_type = [];
+        var seat_price = [];
+        var seat_number = [];
+        fetch(url, { method: "GET", headers: headers })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Successfully queried for seats: ", data);
+                for(let i=0; i < data['seats'].length; i++) {
+                    seat_type.push(data['seats'][i]['seat_type']);
+                    seat_price.push(data['seats'][i]['price']);
+                    seat_number.push(data['seats'][i]['seat_number']);
+
+                    console.log("Setting for: " + data['seats'][i]['seat_number'])
+                    var seatElement = document.getElementById(data['seats'][i]['seat_number']);
+                    seatElement.classList = ["seat"];
+                }
+            })
+            .catch((error) => {
+                console.log("Error: ", error);
+                alert("Failed to fetch seats");
+            })
+
+            function selectFood() {
+                console.log("Next click");
+                var selectedSeatElements = document.getElementsByClassName("seat selected");
+                if (selectedSeatElements.length <= 1) {
+                    alert("Please select seats!");
+                    return;
+                }
+
+                var final_selected_seat_numbers = "";
+                var selected_seats = [];
+                for (let i = 0; i < selectedSeatElements.length; i++) {
+                    if (selectedSeatElements[i].id === "" || selectedSeatElements[i].id == null) {
+                        continue;
+                    }
+
+                    console.log("Selected seat: " + selectedSeatElements[i].id);
+                    final_selected_seat_numbers += "," + selectedSeatElements[i].id;
+                    selected_seats.push(selectedSeatElements[i].id);
+                }
+
+                final_selected_seat_numbers = final_selected_seat_numbers.substring(1);
+
+                var url_add_show_seats = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/addshowseats?user_id="
+                var user_id = localStorage.getItem('user_id_store');
+                var show_id = localStorage.getItem('selected_show_id');
+                var number_of_seats = parseInt(document.getElementById("totalSelected").innerHTML);
+                var selected_available_seats = parseInt(localStorage.getItem("selected_available_seats"));
+                var seats_remaining = parseInt(selected_available_seats) - parseInt(number_of_seats);
+                var selected_theater_id = localStorage.getItem('selected_theater_id');
+                var headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
+                var show_id = localStorage.getItem('selected_show_id');
+                var url = url_add_show_seats+user_id +"&show_id="+ show_id+"&number_of_seats="+ number_of_seats+"&seats_remaining="+ seats_remaining + "&theater_room_id="+ selected_theater_id
+                console.log("Log: " + url);
+                console.log("Log: Sending Post request to the backend to save booking details and update seat changes")
+                    fetch(url,
+                        {
+                            method: "POST",
+                            headers: headers,
+                            body: JSON.stringify({ booked_seats: final_selected_seat_numbers.split(",") })
+                        })
+                        .then(response => response.json()) 
+                        .then((data) => { 
+                            console.log("log for post:" + JSON.stringify(data));
+                            console.log(data.message);
+
+                            var final_totalnumber_of_booked_seats = document.getElementById("totalSelected").innerHTML;
+                            console.log("final_totalnumber_of_booked_seats: " + final_totalnumber_of_booked_seats);
+                            localStorage.setItem('final_totalnumber_of_booked_seats', final_totalnumber_of_booked_seats);
+                            
+                            console.log("final_selected_seat_numbers: " + final_selected_seat_numbers);
+                            localStorage.setItem('final_selected_seat_numbers', final_selected_seat_numbers);
+
+                            var final_totalcost_of_booked_seats = document.getElementById("costSelected").innerHTML;
+                            console.log("final_totalcost_of_booked_seats: " + final_totalcost_of_booked_seats);
+                            localStorage.setItem('final_totalcost_of_booked_seats', final_totalnumber_of_booked_seats);
+                            
+                            console.log("booking_id: " + data.booking_id);
+                            localStorage.setItem('booking_id', data.booking_id);
+
+                            console.log("final_total_cost_of_seats: " + totalCostOfSeats);
+                            localStorage.setItem('final_total_cost_of_seats', totalCostOfSeats);
+                            
+                            
+                        })
+                        .catch((error) => {
+                            console.log("Error: ", error);
+                            alert("Failed to book seats");
+                        });
+            }
+            function next(){
+                window.location = 'https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pages/food';
+            }
+    </script>
+  </body>
+</html>
