@@ -22,7 +22,7 @@ The following are the problems our web app aims to solve.
 
 Below is a schematic diagram (Figure 1) of the high-level processes we plan to use to create our web app. It will mainly use Amazon Web Services and JAVA language. For our front-end/client-tier, we plan to create JAVA scripts with CLI. We will request and get responses through the Amazon API Gateway. The APIs that we will create in AWS will use REST Architecture. Our middle-tier will comprise of these programming interfaces. We will have a set of APIs running on the “search movies” lambda service, another set on the “ticket booking” lambda service, and the last set on the “payment processing” lambda service as shown in figure 1. These services will be implemented using JAVA and Node JavaScript. For our data-tier, we will be using Amazon’s Dynamo Database for a caching system. We have a read-intensive application (movies, locations, trailers, descriptions, etc.), so we prefer to be as efficient as possible in responding to the client when the data requested is generally frequently used. Secondly, we plan to use Amazon Relational Database Service (RDS) to store all our data points in tabular format: movies, theater locations, movie show timings, booking information, and more. 
 
-![High level Architectural Schemata](/figures/"high level architechture.JPG")
+![High level Architectural Schemata](https://github.com/Sahana-Pandurangi/MovieTicketBookingApp/blob/1bf7c783f422d2d2062a1de58509a9cc72ba1c7b/figures/high%20level%20architechture.jpg)
 Figure 1: High level Architectural Schemata
 
 # SYSTEM DESIGN CONSIDERATIONS
