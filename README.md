@@ -48,7 +48,7 @@ Amazon Relational Database Service
 Amazon Dynamo Database 
 * Because of the low latency and flexibility of this NoSQL database, we plan to use it to implement a caching system. Our APIs in the middle tier will call this database.
 
-https://github.com/Sahana-Pandurangi/MovieTicketBookingApp/tree/main/figures#:~:text=.%E2%80%8A.-,database.jpg,-MovieTicketBookingApp"
+![Schemata of tables in database](https://github.com/Sahana-Pandurangi/MovieTicketBookingApp/blob/82faa39492e9204a2c8d3d75246dcc1efcb61b30/figures/database.jpg)
 Figure 2: Schemata of tables in database [Final].
 
 ## Middle-Tier: 
